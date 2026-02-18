@@ -1,7 +1,7 @@
 # PriceStream Dashboard API
 
 This is the backend API for the PriceStream Dashboard. It provides endpoints for user authentication,
-data retrieval from the PriceStream service exposed endpoints, and serves as the core of the dashboard's functionality.
+data retrieval from the **[PriceStream](https://github.com/AranaDeDoros/PriceStream)** service exposed endpoints, and serves as the core of the dashboard's functionality.
 
 ## Features
 
