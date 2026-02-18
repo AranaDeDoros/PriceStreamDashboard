@@ -1,7 +1,7 @@
 from fastapi import Depends, HTTPException, status
 from jose import JWTError, jwt
 from sqlalchemy.orm import Session
-
+from loguru import logger
 from config.settings import ALGORITHM, OAUTH2_SCHEME, SECRET_KEY
 from db.DB import get_db
 from domain.models import UserDB
@@ -36,18 +36,17 @@ async def is_valid_request(
         headers={"WWW-Authenticate": "Bearer"},
     )
     try:
-        print("SECRET VERIFY:", SECRET_KEY)
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        print("PAYLOAD:", payload)
         username: str = payload.get("sub")
         if username is None:
             raise credentials_exception
     except JWTError as exc:
-        print(f"JWT decode error: {exc}")
+        logger.bind(service="UserService").exception(f"JWT decode error: {exc}")
         raise credentials_exception from exc
 
     user = service.get_user(username)
     if user is None or not user.is_active:
+        logger.bind(service="UserService").exception(f"JWT decode error: {exc}")
         raise credentials_exception
 
     return user

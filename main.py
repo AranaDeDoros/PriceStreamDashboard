@@ -2,19 +2,20 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-
 import config.settings
 from dependencies import external_api_service
 from routers import api, auth
-
+from utils.logging import set_initial_logging_config
+from loguru import logger
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     #
-    print("Starting up...")
+    set_initial_logging_config()
+    logger.info("Starting up...")
     yield
     # Shutdown
-    print("Shutting down...")
+    logger.info("Shutting down...")
     await external_api_service.close()
 
 
