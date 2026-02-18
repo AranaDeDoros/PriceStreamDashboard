@@ -1,0 +1,7 @@
+__pycache__/
+venv/
+*.pyc
+.ruff_cache/
+*.sql
+.env
+frontend/
