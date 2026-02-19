@@ -18,6 +18,7 @@ dependencies = [
     "httpcore==1.0.9",
     "httpx==0.28.1",
     "idna==3.11",
+    "loguru==0.7.3",
     "packaging==26.0",
     "passlib==1.7.4",
     "psycopg2-binary==2.9.11",
