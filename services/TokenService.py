@@ -1,7 +1,7 @@
 import hashlib
 import secrets
 from datetime import UTC, datetime, timedelta
-
+from loguru import logger
 from jose import jwt
 from passlib.context import CryptContext
 
@@ -19,7 +19,7 @@ class TokenService:
         try:
             return pwd_context.verify(plain_password, hashed_password)
         except Exception as e:
-            print(f"Error verifying password: {e}")
+            logger.bind(service=self.__class__.__name___).exception(f"Error verifying password: {e}")
             return False
 
     def hash_password(self, password: str) -> str:
@@ -27,7 +27,6 @@ class TokenService:
 
     # ---------- ACCESS TOKEN ----------
     def create_access_token(self, data: dict, expires_delta: timedelta) -> str:
-        print("SECRET CREATE:", self.secret_key)
         to_encode = data.copy()
         expire = datetime.now(UTC) + expires_delta
         to_encode.update({"exp": int(expire.timestamp())})
