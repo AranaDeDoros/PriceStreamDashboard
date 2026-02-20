@@ -2,10 +2,10 @@ from datetime import UTC, datetime, timedelta
 
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.security import OAuth2PasswordRequestForm
+from fastapi_throttle import RateLimiter
 from sqlalchemy.orm import Session
 
 from db.DB import get_db
-
 from dependencies import ACCESS_TOKEN_EXPIRE_MINUTES, token_service
 from domain.models import (
     AccessToken,
@@ -17,7 +17,8 @@ from domain.models import (
 )
 from services.UserService import UserService, get_user_service
 
-router = APIRouter(prefix="/api/v1/auth")
+auth_limit = RateLimiter(times=5, seconds=60)
+router = APIRouter(prefix="/api/v1/auth", dependencies=[Depends(auth_limit)])
 
 
 @router.post("/token", response_model=Token)

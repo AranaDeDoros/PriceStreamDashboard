@@ -1,11 +1,13 @@
 from uuid import UUID
 
 from fastapi import APIRouter, Depends, HTTPException
+from fastapi_throttle import RateLimiter
 
 from dependencies import external_api_service, get_current_active_user
 from domain.models import IngestionRun, IngestionStatus, UserDB
 
-router = APIRouter(prefix="/api/v1/ingestion")
+api_limit = RateLimiter(times=5, seconds=30)
+router = APIRouter(prefix="/api/v1/ingestion",  dependencies=[Depends(api_limit)])
 
 
 @router.get("/")

@@ -1,5 +1,7 @@
-from loguru import logger
 import sys
+
+from loguru import logger
+
 
 def set_initial_logging_config():
     logger.remove()

@@ -1,8 +1,9 @@
 import hashlib
 import secrets
 from datetime import UTC, datetime, timedelta
-from loguru import logger
+
 from jose import jwt
+from loguru import logger
 from passlib.context import CryptContext
 
 pwd_context = CryptContext(schemes=["bcrypt_sha256"], deprecated="auto")

@@ -5,3 +5,4 @@ venv/
 *.sql
 .env
 frontend/
+*.log

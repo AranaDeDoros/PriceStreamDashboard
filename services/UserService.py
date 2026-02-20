@@ -1,7 +1,8 @@
 from fastapi import Depends, HTTPException, status
 from jose import JWTError, jwt
-from sqlalchemy.orm import Session
 from loguru import logger
+from sqlalchemy.orm import Session
+
 from config.settings import ALGORITHM, OAUTH2_SCHEME, SECRET_KEY
 from db.DB import get_db
 from domain.models import UserDB

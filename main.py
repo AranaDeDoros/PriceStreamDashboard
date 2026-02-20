@@ -2,11 +2,13 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from loguru import logger
+
 import config.settings
 from dependencies import external_api_service
 from routers import api, auth
 from utils.logging import set_initial_logging_config
-from loguru import logger
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
