@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta
 from types import SimpleNamespace
 
 import pytest
@@ -41,7 +41,9 @@ def auth_app(app):
 
 def test_login_returns_tokens_for_valid_credentials(auth_app, client):
     hashed_password = token_service.hash_password("pass-123")
-    user = SimpleNamespace(id="user-1", username="alice", hashed_password=hashed_password)
+    user = SimpleNamespace(
+        id="user-1", username="alice", hashed_password=hashed_password
+    )
     fake_db = FakeDB()
 
     from services.UserService import UserService
@@ -160,7 +162,7 @@ def test_register_creates_user(auth_app, client):
             user_db.role = "USER"
             user_db.is_active = True
             user_db.is_superuser = False
-            user_db.created_at = datetime.now(timezone.utc)
+            user_db.created_at = datetime.now(UTC)
             return user_db
 
     auth_app.dependency_overrides[get_user_service] = lambda: StubUserService()

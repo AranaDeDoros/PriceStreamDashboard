@@ -20,7 +20,9 @@ class TokenService:
         try:
             return pwd_context.verify(plain_password, hashed_password)
         except Exception as e:
-            logger.bind(service=self.__class__.__name___).exception(f"Error verifying password: {e}")
+            logger.bind(service=self.__class__.__name___).exception(
+                f"Error verifying password: {e}"
+            )
             return False
 
     def hash_password(self, password: str) -> str:

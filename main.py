@@ -12,7 +12,7 @@ from utils.logging import set_initial_logging_config
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    #
+    # Startup
     set_initial_logging_config()
     logger.info("Starting up...")
     yield

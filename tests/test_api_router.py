@@ -39,18 +39,26 @@ def test_root_returns_welcome(client):
 
 def test_get_all_runs_returns_data(client, monkeypatch):
     run = _sample_run_dict(str(uuid.uuid4()))
-    monkeypatch.setattr(api_router, "external_api_service", StubExternalApi(all_runs=[run]))
+    monkeypatch.setattr(
+        api_router, "external_api_service", StubExternalApi(all_runs=[run])
+    )
 
-    response = client.get("/api/v1/ingestion/runs", headers={"Authorization": "Bearer fake"})
+    response = client.get(
+        "/api/v1/ingestion/runs", headers={"Authorization": "Bearer fake"}
+    )
 
     assert response.status_code == 200
     assert len(response.json()) == 1
 
 
 def test_get_all_runs_returns_404_when_empty(client, monkeypatch):
-    monkeypatch.setattr(api_router, "external_api_service", StubExternalApi(all_runs=[]))
+    monkeypatch.setattr(
+        api_router, "external_api_service", StubExternalApi(all_runs=[])
+    )
 
-    response = client.get("/api/v1/ingestion/runs", headers={"Authorization": "Bearer fake"})
+    response = client.get(
+        "/api/v1/ingestion/runs", headers={"Authorization": "Bearer fake"}
+    )
 
     assert response.status_code == 404
     assert response.json()["detail"] == "No runs found"
@@ -72,7 +80,9 @@ def test_get_run_by_id_returns_404_when_missing(client, monkeypatch):
     run_id = str(uuid.uuid4())
     monkeypatch.setattr(api_router, "external_api_service", StubExternalApi(by_id=None))
 
-    response = client.get(f"/api/v1/ingestion/runs/{run_id}", headers={"Authorization": "Bearer fake"})
+    response = client.get(
+        f"/api/v1/ingestion/runs/{run_id}", headers={"Authorization": "Bearer fake"}
+    )
 
     assert response.status_code == 404
     assert response.json()["detail"] == "Run not found"
@@ -80,7 +90,9 @@ def test_get_run_by_id_returns_404_when_missing(client, monkeypatch):
 
 def test_get_runs_by_status_returns_data(client, monkeypatch):
     run = _sample_run_dict(str(uuid.uuid4()))
-    monkeypatch.setattr(api_router, "external_api_service", StubExternalApi(by_status=[run]))
+    monkeypatch.setattr(
+        api_router, "external_api_service", StubExternalApi(by_status=[run])
+    )
 
     response = client.get(
         f"/api/v1/ingestion/status/{IngestionStatus.RUNNING.value}",
@@ -92,7 +104,9 @@ def test_get_runs_by_status_returns_data(client, monkeypatch):
 
 
 def test_get_runs_by_status_returns_404_when_empty(client, monkeypatch):
-    monkeypatch.setattr(api_router, "external_api_service", StubExternalApi(by_status=[]))
+    monkeypatch.setattr(
+        api_router, "external_api_service", StubExternalApi(by_status=[])
+    )
 
     response = client.get(
         f"/api/v1/ingestion/status/{IngestionStatus.FAILED.value}",

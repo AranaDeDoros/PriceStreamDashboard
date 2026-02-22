@@ -3,26 +3,36 @@ from pathlib import Path
 
 sys.path.append(str(Path(__file__).resolve().parents[1]))
 
+import datetime as _dt
 import os
 from dataclasses import dataclass
-import datetime as _dt
 
 import pytest
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
 
+import config.settings
+
 # Required environment variables for module imports in dependencies/config
-os.environ.setdefault("SECRET_KEY", "test-secret")
-os.environ.setdefault("ALGORITHM", "HS256")
-os.environ.setdefault("ACCESS_TOKEN_EXPIRE_MINUTES", "30")
-os.environ.setdefault("EXTERNAL_API_URL", "http://example.test")
-os.environ.setdefault("DATABASE_URL", "sqlite+pysqlite:///:memory:")
-os.environ.setdefault("HOME_URL", "http://localhost")
-os.environ.setdefault("LOCAL_URL", "http://127.0.0.1")
+SECRET_KEY = config.settings.SECRET_KEY
+ALGORITHM = config.settings.ALGORITHM
+ACCESS_TOKEN_EXPIRE_MINUTES = int(config.settings.ACCESS_TOKEN_EXPIRE_MINUTES)
+EXTERNAL_API_URL = config.settings.EXTERNAL_API_URL
+OAUTH2_SCHEME = config.settings.OAUTH2_SCHEME
+DATABASE_URL = config.settings.DATABASE_URL
+HOME_URL = config.settings.HOME_URL
+LOCAL_URL = config.settings.LOCAL_URL
+os.environ.setdefault("SECRET_KEY", SECRET_KEY)
+os.environ.setdefault("ALGORITHM", ALGORITHM)
+os.environ.setdefault("ACCESS_TOKEN_EXPIRE_MINUTES", str(ACCESS_TOKEN_EXPIRE_MINUTES))
+os.environ.setdefault("EXTERNAL_API_URL", EXTERNAL_API_URL)
+os.environ.setdefault("DATABASE_URL", DATABASE_URL)
+os.environ.setdefault("HOME_URL", HOME_URL)
+os.environ.setdefault("LOCAL_URL", LOCAL_URL)
 
 # Compat for Python <3.11 when app imports `from datetime import UTC`
 if not hasattr(_dt, "UTC"):
-    _dt.UTC = _dt.timezone.utc
+    _dt.UTC = _dt.UTC
 
 
 from dependencies import get_current_active_user  # noqa: E402
