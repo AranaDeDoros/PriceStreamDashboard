@@ -28,7 +28,7 @@ jobs:
       EXTERNAL_API_URL: http://price-stream-service:8080/api/ # scala service
       HOME_URL: http://localhost:5173
       LOCAL_URL: http://127.0.0.1:5173
-      DATABASE_URL: postgresql+psycopg2://test_user:123456@localhost:5432/camel
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
       SECRET_KEY: ${{ secrets.SECRET_KEY }}
       ALGORITHM: HS256
       ACCESS_TOKEN_EXPIRE_MINUTES: "30"
