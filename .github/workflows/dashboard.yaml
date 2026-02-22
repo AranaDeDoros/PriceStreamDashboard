@@ -9,21 +9,6 @@ jobs:
   quality-build-test:
     runs-on: ubuntu-latest
 
-    services:
-      postgres:
-        image: postgres:15
-        env:
-          POSTGRES_USER: test_user
-          POSTGRES_PASSWORD: 123456
-          POSTGRES_DB: camel
-        ports:
-          - 5432:5432
-        options: >-
-          --health-cmd="pg_isready -U test_user"
-          --health-interval=10s
-          --health-timeout=5s
-          --health-retries=5
-
     env:
       EXTERNAL_API_URL: http://price-stream-service:8080/api/ # scala service
       HOME_URL: http://localhost:5173
@@ -59,12 +44,6 @@ jobs:
 
       - name: Build package
         run: python -m build
-
-      - name: Wait for Postgres
-        run: |
-          until pg_isready -h localhost -p 5432 -U test_user; do
-            sleep 2
-          done
 
       - name: Run tests with coverage
         run: pytest -q
