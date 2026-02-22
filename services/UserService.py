@@ -47,7 +47,8 @@ async def is_valid_request(
 
     user = service.get_user(username)
     if user is None or not user.is_active:
+        exc = RuntimeError("Inactive or missing user")
         logger.bind(service="UserService").exception(f"JWT decode error: {exc}")
-        raise credentials_exception
+        raise credentials_exception from exc
 
     return user
