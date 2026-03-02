@@ -4,7 +4,7 @@ import httpx
 from fastapi import Depends
 
 import config.settings
-from domain.models import IngestionRun, IngestionStatus, UserDB
+from domain.models import IngestionRun, IngestionStatus, Platform, UserDB
 from services.TokenService import TokenService
 from services.UserService import is_valid_request
 
@@ -44,6 +44,20 @@ class ExternalAPIService:
             return []
         resp.raise_for_status()
         return [IngestionRun(**run) for run in resp.json()]
+
+    async def find_by_platform(self, platform: str) -> list[IngestionRun]:
+        resp = await self.client.get(f"/runs/platform/{platform}")
+        if resp.status_code == 404:
+            return []
+        resp.raise_for_status()
+        return [IngestionRun(**run) for run in resp.json()]
+
+    async def get_all_platforms(self) -> list[Platform]:
+        resp = await self.client.get("/platforms")
+        if resp.status_code == 404:
+            return []
+        resp.raise_for_status()
+        return [Platform(**platform) for platform in resp.json()]
 
     async def close(self):
         await self.client.aclose()

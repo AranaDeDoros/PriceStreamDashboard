@@ -1,10 +1,10 @@
 from uuid import UUID
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends
 from fastapi_throttle import RateLimiter
 
 from dependencies import external_api_service, get_current_active_user
-from domain.models import IngestionRun, IngestionStatus, UserDB
+from domain.models import IngestionRun, IngestionStatus, Platform, UserDB
 
 api_limit = RateLimiter(times=5, seconds=30)
 router = APIRouter(prefix="/api/v1/ingestion", dependencies=[Depends(api_limit)])
@@ -19,7 +19,7 @@ async def root():
 async def get_all_runs(current_user: UserDB = Depends(get_current_active_user)):
     run = await external_api_service.all()
     if not run:
-        raise HTTPException(status_code=404, detail="No runs found")
+        return []
     return run
 
 
@@ -29,8 +29,26 @@ async def get_run_by_id(
 ):
     run = await external_api_service.find_by_id(run_id)
     if run is None:
-        raise HTTPException(status_code=404, detail="Run not found")
+        return []
     return run
+
+
+@router.get("/runs/platform/{platform}", response_model=list[IngestionRun])
+async def get_runs_by_platform(
+    platform: str, current_user: UserDB = Depends(get_current_active_user)
+):
+    runs = await external_api_service.find_by_platform(platform)
+    if not runs:
+        return []
+    return runs
+
+
+@router.get("/platforms", response_model=list[Platform])
+async def get_all_platforms(current_user: UserDB = Depends(get_current_active_user)):
+    platforms = await external_api_service.get_all_platforms()
+    if not platforms:
+        return []
+    return platforms
 
 
 @router.get("/status/{status}", response_model=list[IngestionRun])
@@ -39,5 +57,5 @@ async def get_runs_by_status(
 ):
     runs = await external_api_service.find_by_status(status)
     if not runs:
-        raise HTTPException(status_code=404, detail="No runs found for this status")
+        return []
     return runs

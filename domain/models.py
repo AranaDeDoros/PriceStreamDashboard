@@ -97,3 +97,8 @@ class UserOut(BaseModel):
     is_active: bool
     is_superuser: bool
     created_at: datetime
+
+
+class Platform(BaseModel):
+    id: str
+    name: str
