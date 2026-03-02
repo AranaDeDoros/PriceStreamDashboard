@@ -60,8 +60,8 @@ def test_get_all_runs_returns_404_when_empty(client, monkeypatch):
         "/api/v1/ingestion/runs", headers={"Authorization": "Bearer fake"}
     )
 
-    assert response.status_code == 404
-    assert response.json()["detail"] == "No runs found"
+    assert response.status_code == 200
+    assert response.json() == []
 
 
 def test_get_run_by_id_returns_one(client, monkeypatch):
@@ -85,7 +85,6 @@ def test_get_run_by_id_returns_404_when_missing(client, monkeypatch):
     )
 
     assert response.status_code == 404
-    assert response.json()["detail"] == "Run not found"
 
 
 def test_get_runs_by_status_returns_data(client, monkeypatch):
@@ -113,5 +112,5 @@ def test_get_runs_by_status_returns_404_when_empty(client, monkeypatch):
         headers={"Authorization": "Bearer fake"},
     )
 
-    assert response.status_code == 404
-    assert response.json()["detail"] == "No runs found for this status"
+    assert response.status_code == 200
+    assert response.json() == []

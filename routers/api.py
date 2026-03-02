@@ -1,6 +1,6 @@
 from uuid import UUID
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from fastapi_throttle import RateLimiter
 
 from dependencies import external_api_service, get_current_active_user
@@ -29,7 +29,7 @@ async def get_run_by_id(
 ):
     run = await external_api_service.find_by_id(run_id)
     if run is None:
-        return []
+        raise HTTPException(status_code=404, detail="Run not found")
     return run
 
 
@@ -38,16 +38,12 @@ async def get_runs_by_platform(
     platform: str, current_user: UserDB = Depends(get_current_active_user)
 ):
     runs = await external_api_service.find_by_platform(platform)
-    if not runs:
-        return []
     return runs
 
 
 @router.get("/platforms", response_model=list[Platform])
 async def get_all_platforms(current_user: UserDB = Depends(get_current_active_user)):
     platforms = await external_api_service.get_all_platforms()
-    if not platforms:
-        return []
     return platforms
 
 
@@ -56,6 +52,4 @@ async def get_runs_by_status(
     status: IngestionStatus, current_user: UserDB = Depends(get_current_active_user)
 ):
     runs = await external_api_service.find_by_status(status)
-    if not runs:
-        return []
     return runs
