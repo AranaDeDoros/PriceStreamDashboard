@@ -100,5 +100,5 @@ class UserOut(BaseModel):
 
 
 class Platform(BaseModel):
-    id: str
+    id: int
     name: str

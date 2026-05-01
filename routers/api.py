@@ -6,7 +6,7 @@ from fastapi_throttle import RateLimiter
 from dependencies import external_api_service, get_current_active_user
 from domain.models import IngestionRun, IngestionStatus, Platform, UserDB
 
-api_limit = RateLimiter(times=5, seconds=30)
+api_limit = RateLimiter(times=60, seconds=60)
 router = APIRouter(prefix="/api/v1/ingestion", dependencies=[Depends(api_limit)])
 
 
