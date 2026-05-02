@@ -47,6 +47,8 @@ class IngestionRun(BaseSchema):
     started_at: datetime
     finished_at: datetime | None = None
     status: IngestionStatus
+    error: str | None = None,
+    productsProcessed: int
 
 
 # -- Database Models ---
