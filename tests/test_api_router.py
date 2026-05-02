@@ -1,3 +1,4 @@
+import random
 import uuid
 from datetime import datetime
 
@@ -27,6 +28,8 @@ def _sample_run_dict(run_id: str):
         "startedAt": datetime(2026, 1, 1, 12, 0, 0).isoformat(),
         "finishedAt": None,
         "status": "Running",
+        "error": "",
+        "productsProcessed": random.randint(0, 100),
     }
 
 
