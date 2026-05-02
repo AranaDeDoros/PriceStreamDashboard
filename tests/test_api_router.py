@@ -29,7 +29,7 @@ def _sample_run_dict(run_id: str):
         "finishedAt": None,
         "status": "Running",
         "error": "",
-        "productsProcessed": random.randint(0, 100),
+        "products_processed": random.randint(0, 100),
     }
 
 
